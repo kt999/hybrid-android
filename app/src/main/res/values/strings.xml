@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">하이브리드 템플릿</string>
+    <string name="loading">로딩중입니다.</string>
+    <string name="network_error">네트워크 연결이 원활하지 않습니다.</string>
+
+    <string name="default_notification_channel_id">Channel ID</string>
+    <string name="default_notification_channel_name" translatable="true">Test</string>
+</resources>
