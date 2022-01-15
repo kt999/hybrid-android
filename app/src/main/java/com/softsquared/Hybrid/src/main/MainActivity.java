@@ -2,6 +2,8 @@ package com.softsquared.Hybrid.src.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -30,8 +32,8 @@ import java.net.URISyntaxException;
 public class MainActivity extends BaseActivity {
     public final Handler javascripthandler = new Handler();
 
-    //웹 주소
-    private String webHost = "10.20.181.253:3000";
+    //웹 주소 (배포가 되기전이라면, 내부 ip 사용해야함)
+    private String webHost = "10.20.190.172:3000";
     private String webHostUrl = "http://"+webHost+"/" ;
 
     public WebView mWebView;
@@ -106,10 +108,20 @@ public class MainActivity extends BaseActivity {
 
             //alert 대응
             @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result)
+            public boolean onJsAlert(WebView view, String url, String message, final android.webkit.JsResult result)
             {
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-                result.confirm();
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("")
+                        .setMessage(message)
+                        .setPositiveButton(android.R.string.ok,
+                                new AlertDialog.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        result.confirm();
+                                    }
+                                })
+                        .setCancelable(false)
+                        .create()
+                        .show();
                 return true;
             }
 
@@ -327,7 +339,7 @@ public class MainActivity extends BaseActivity {
     //뒤로가기 두번 종료 (웹의 android_back_press() 란 이름의 함수 호출)
     @Override
     public void onBackPressed() {
-        mWebView.loadUrl("javascript:android_back_press()");
+        mWebView.loadUrl("javascript:webBackPress()");
     }
 
     //사진 업로드 관련 모듈
